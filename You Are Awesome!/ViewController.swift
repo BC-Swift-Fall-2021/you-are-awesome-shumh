@@ -14,13 +14,37 @@ class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     
     var imageNumber = -1
+    var soundNumber = -1
     var messageNumber = -1
-    let totalNumberOfImages = 9
+    let totalNumberOfSounds = 6
+    let totalNumberOfImages = 10
     var audioPlayer: AVAudioPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         messageLabel.text = ""
+    }
+    
+    
+    func playSound(name: String){
+       if let sound = NSDataAsset(name: name){
+           do {
+               try audioPlayer = AVAudioPlayer(data: sound.data)
+               audioPlayer.play()
+           } catch {
+               print("😡 Error: \(error.localizedDescription)Could not read data from file \(name)")
+           }
+       } else {
+           print("😡 Error: Could not read data from file \(name)")
+       }
+   }
+    
+    func nonRepeatingRandom(originalNumber: Int, upperBounds: Int) -> Int {
+        var newNumber: Int
+        repeat {
+            newNumber = Int.random(in: 0...upperBounds-1)
+        } while originalNumber == newNumber
+        return newNumber
     }
     
     @IBAction func showMessagePressed(_ sender: UIButton)  {
@@ -32,30 +56,15 @@ class ViewController: UIViewController {
                         "When the Genius Bar Needs Help, They Call You!",
                         "You've Got the Design Skills of Jony Ive"]
         
-        var newMessageNumber: Int
-        repeat {
-            newMessageNumber = Int.random(in: 0...messages.count-1)
-        } while messageNumber == newMessageNumber
-        messageNumber = newMessageNumber
-        messageLabel.text = messages[newMessageNumber]
+        messageNumber = nonRepeatingRandom(originalNumber: messageNumber, upperBounds: messages.count)
+        messageLabel.text = messages[messageNumber]
         
-        var newImageNumber: Int
-        repeat {
-            newImageNumber = Int.random(in: 0...totalNumberOfImages)
-        } while imageNumber == newImageNumber
-        imageNumber = newImageNumber
+        imageNumber = nonRepeatingRandom(originalNumber: imageNumber, upperBounds: totalNumberOfImages)
         imageView.image = UIImage(named: "image\(imageNumber)")
-         
-        if let sound = NSDataAsset(name: "sound0"){
-            do {
-                try audioPlayer = AVAudioPlayer(data: sound.data)
-                audioPlayer.play()
-            } catch {
-                print("😡 Error: \(error.localizedDescription)Could not read data from file sound0")
-            }
-        } else {
-            print("😡 Error: Could not read data from file sound0")
-        }
+        
+        soundNumber = nonRepeatingRandom(originalNumber: soundNumber, upperBounds: totalNumberOfSounds)
+        playSound(name: "sound\(soundNumber)")
+
     }
     
 }
