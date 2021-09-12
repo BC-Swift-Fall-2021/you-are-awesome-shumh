@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var playSoundSwitch: UISwitch!
     
     var imageNumber = -1
     var soundNumber = -1
@@ -63,8 +64,14 @@ class ViewController: UIViewController {
         imageView.image = UIImage(named: "image\(imageNumber)")
         
         soundNumber = nonRepeatingRandom(originalNumber: soundNumber, upperBounds: totalNumberOfSounds)
-        playSound(name: "sound\(soundNumber)")
-
+        if playSoundSwitch.isOn {
+            playSound(name: "sound\(soundNumber)")
+        }
+    }
+    @IBAction func playSoundToggled(_ sender: UISwitch) {
+        if !sender.isOn && audioPlayer != nil { //if is.On is false
+                audioPlayer.stop()
+        }
     }
     
 }
