@@ -18,13 +18,25 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showMessagePressed(_ sender: UIButton)  {
-        let imageNumber = Int.random(in: 0...9)
-        let imageName = "image\(imageNumber)"
-        imageView.image = UIImage(named: imageName)
         
-        let messages = ["You Are Awesome!", "You Are Great!", "You Are Fantastic!", "Fabulous? That's You!", "When the Genius Bar Needs Help, They Call You"]
-        let messageNumber = Int.random(in: 0...messages.count-1)
-        messageLabel.text = messages[messageNumber]
+        let messages = ["You Are Awesome!",
+                        "You Are Great!",
+                        "You Are Fantastic!",
+                        "Fabulous? That's You!",
+                        "When the Genius Bar Needs Help, They Call You!",
+                        "You've Got the Design Skills of Jony Ive"]
+        
+        var newMessage = messages[Int.random(in: 0...messages.count-1)]
+        while messageLabel.text == newMessage {
+            newMessage = messages[Int.random(in: 0...messages.count-1)]
+        }
+        messageLabel.text = messages[Int.random(in: 0...messages.count-1)]
+        
+        var newImage = UIImage(named: "image\(Int.random(in: 0...9))")
+        while imageView.image == newImage {
+            newImage = UIImage(named: "image\(Int.random(in: 0...9))")
+        }
+        imageView.image = newImage
     }
     
 }
